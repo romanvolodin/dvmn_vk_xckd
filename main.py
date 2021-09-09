@@ -8,7 +8,7 @@ def main():
     env.read_env()
 
     vk_token = env.str("VK_ACCESS_TOKEN")
-    vk.fetch_groups(vk_token)
+    upload_url = vk.get_upload_url(vk_token)
 
 
 if __name__ == "__main__":
