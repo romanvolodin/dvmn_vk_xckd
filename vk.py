@@ -57,3 +57,29 @@ def save_album_photo(token, photo):
     )
     response.raise_for_status()
     return response.json()
+
+
+def publish_photo(token, photo={}):
+    attachment_template = "photo{owner_id}_{media_id}"
+    attachments = ",".join(
+        [
+            attachment_template.format(
+                owner_id=response["owner_id"],
+                media_id=response["id"],
+            )
+            for response in photo['response']
+        ]
+    )
+    response = requests.post(
+        f"{API_BASE_URL}/wall.post",
+        params={
+            "access_token": token,
+            "v": API_VERSION,
+            "owner_id": VK_GROUP_ID * -1,
+            "from_group": 1,
+            "attachments": attachments,
+            "message": "Ptiza-kolbasa"
+        }
+    )
+    response.raise_for_status()
+    return response.json()
