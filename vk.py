@@ -3,64 +3,49 @@ import requests
 
 API_BASE_URL = "https://api.vk.com/method"
 API_VERSION = 5.131
-VK_GROUP_ID = 207032382
 
 
-def get_upload_url(token):
+def get_upload_url(params):
     response = requests.get(
-        f"{API_BASE_URL}/photos.getWallUploadServer",
-        params={
-            "access_token": token,
-            "v": API_VERSION,
-            "group_id": VK_GROUP_ID,
-        }
+        f"{API_BASE_URL}/photos.getWallUploadServer", params=params
     )
     response.raise_for_status()
     return response.json()["response"]["upload_url"]
 
 
-def upload_image(token, image_path):
+def upload_image(image_path, params):
     with open(image_path, "rb") as image:
         response = requests.post(
-            get_upload_url(token),
-            files={"photo": image},
+            get_upload_url(params), files={"photo": image}
         )
     response.raise_for_status()
     return response.json()
 
 
-def save_album_comic(token, uploaded_comic):
+def save_album_comic(uploaded_comic, params):
+    params.update({
+        "photo": uploaded_comic["photo"],
+        "server": uploaded_comic["server"],
+        "hash": uploaded_comic["hash"],
+    })
     response = requests.post(
-        f"{API_BASE_URL}/photos.saveWallPhoto",
-        params={
-            "access_token": token,
-            "v": API_VERSION,
-            "group_id": VK_GROUP_ID,
-            "photo": uploaded_comic["photo"],
-            "server": uploaded_comic["server"],
-            "hash": uploaded_comic["hash"],
-        }
+        f"{API_BASE_URL}/photos.saveWallPhoto", params=params
     )
     response.raise_for_status()
     return response.json()["response"][0]
 
 
-def publish_comic(token, saved_comic, title):
+def publish_comic(saved_comic, title, params):
     attachment_template = "photo{owner_id}_{media_id}"
-    attachment = attachment_template.format(
-        owner_id=saved_comic["owner_id"],
-        media_id=saved_comic["id"],
-    )
-    response = requests.post(
-        f"{API_BASE_URL}/wall.post",
-        params={
-            "access_token": token,
-            "v": API_VERSION,
-            "owner_id": VK_GROUP_ID * -1,  # group_id must be negative int
-            "from_group": 1,
-            "attachments": attachment,
-            "message": title,
-        }
-    )
+    params.update({
+        "owner_id": params["group_id"] * -1,
+        "from_group": 1,
+        "message": title,
+        "attachments": attachment_template.format(
+            owner_id=saved_comic["owner_id"],
+            media_id=saved_comic["id"],
+        ),
+    })
+    response = requests.post(f"{API_BASE_URL}/wall.post", params=params)
     response.raise_for_status()
     return response.json()
