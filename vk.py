@@ -43,41 +43,36 @@ def upload_image(token, image_path):
     return response.json()
 
 
-def save_album_photo(token, photo):
+def save_album_photo(token, uploaded_photo):
     response = requests.post(
         f"{API_BASE_URL}/photos.saveWallPhoto",
         params={
             "access_token": token,
             "v": API_VERSION,
             "group_id": VK_GROUP_ID,
-            "photo": photo["photo"],
-            "server": photo["server"],
-            "hash": photo["hash"],
+            "photo": uploaded_photo["photo"],
+            "server": uploaded_photo["server"],
+            "hash": uploaded_photo["hash"],
         }
     )
     response.raise_for_status()
-    return response.json()
+    return response.json()["response"][0]
 
 
-def publish_photo(token, photo={}):
+def publish_photo(token, saved_photo):
     attachment_template = "photo{owner_id}_{media_id}"
-    attachments = ",".join(
-        [
-            attachment_template.format(
-                owner_id=response["owner_id"],
-                media_id=response["id"],
-            )
-            for response in photo['response']
-        ]
+    attachment = attachment_template.format(
+        owner_id=saved_photo["owner_id"],
+        media_id=saved_photo["id"],
     )
     response = requests.post(
         f"{API_BASE_URL}/wall.post",
         params={
             "access_token": token,
             "v": API_VERSION,
-            "owner_id": VK_GROUP_ID * -1,
+            "owner_id": VK_GROUP_ID * -1,  # group_id must be negative int
             "from_group": 1,
-            "attachments": attachments,
+            "attachments": attachment,
             "message": "Ptiza-kolbasa"
         }
     )
