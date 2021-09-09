@@ -59,7 +59,7 @@ def save_album_photo(token, uploaded_photo):
     return response.json()["response"][0]
 
 
-def publish_photo(token, saved_photo):
+def publish_photo(token, saved_photo, title):
     attachment_template = "photo{owner_id}_{media_id}"
     attachment = attachment_template.format(
         owner_id=saved_photo["owner_id"],
@@ -73,7 +73,7 @@ def publish_photo(token, saved_photo):
             "owner_id": VK_GROUP_ID * -1,  # group_id must be negative int
             "from_group": 1,
             "attachments": attachment,
-            "message": "Ptiza-kolbasa"
+            "message": title,
         }
     )
     response.raise_for_status()

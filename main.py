@@ -20,7 +20,7 @@ def main():
     uploaded_photo = vk.upload_image(token, image_path)
     os.remove(image_path)
     saved_photo = vk.save_album_photo(token, uploaded_photo)
-    vk.publish_photo(token, saved_photo)
+    vk.publish_photo(token, saved_photo, comic["title"])
 
 
 if __name__ == "__main__":
