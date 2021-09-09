@@ -12,3 +12,9 @@ def fetch_comic_comment(url):
     response = requests.get(url)
     response.raise_for_status()
     return response.json()["alt"]
+
+
+def fetch_last_comic_id():
+    response = requests.get("https://xkcd.com/info.0.json")
+    response.raise_for_status()
+    return response.json()["num"]
