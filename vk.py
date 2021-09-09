@@ -41,3 +41,19 @@ def upload_image(token, image_path):
         )
     response.raise_for_status()
     return response.json()
+
+
+def save_album_photo(token, photo):
+    response = requests.post(
+        f"{API_BASE_URL}/photos.saveWallPhoto",
+        params={
+            "access_token": token,
+            "v": API_VERSION,
+            "group_id": VK_GROUP_ID,
+            "photo": photo["photo"],
+            "server": photo["server"],
+            "hash": photo["hash"],
+        }
+    )
+    response.raise_for_status()
+    return response.json()
