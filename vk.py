@@ -29,27 +29,27 @@ def upload_image(token, image_path):
     return response.json()
 
 
-def save_album_photo(token, uploaded_photo):
+def save_album_comic(token, uploaded_comic):
     response = requests.post(
         f"{API_BASE_URL}/photos.saveWallPhoto",
         params={
             "access_token": token,
             "v": API_VERSION,
             "group_id": VK_GROUP_ID,
-            "photo": uploaded_photo["photo"],
-            "server": uploaded_photo["server"],
-            "hash": uploaded_photo["hash"],
+            "photo": uploaded_comic["photo"],
+            "server": uploaded_comic["server"],
+            "hash": uploaded_comic["hash"],
         }
     )
     response.raise_for_status()
     return response.json()["response"][0]
 
 
-def publish_photo(token, saved_photo, title):
+def publish_comic(token, saved_comic, title):
     attachment_template = "photo{owner_id}_{media_id}"
     attachment = attachment_template.format(
-        owner_id=saved_photo["owner_id"],
-        media_id=saved_photo["id"],
+        owner_id=saved_comic["owner_id"],
+        media_id=saved_comic["id"],
     )
     response = requests.post(
         f"{API_BASE_URL}/wall.post",

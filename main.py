@@ -17,10 +17,10 @@ def main():
     comic = fetch_random_comic()
     save_image_from_url(comic["img"], image_path)
 
-    uploaded_photo = vk.upload_image(token, image_path)
+    uploaded_comic = vk.upload_image(token, image_path)
     os.remove(image_path)
-    saved_photo = vk.save_album_photo(token, uploaded_photo)
-    vk.publish_photo(token, saved_photo, comic["title"])
+    album_saved_comic = vk.save_album_comic(token, uploaded_comic)
+    vk.publish_comic(token, album_saved_comic, comic["title"])
 
 
 if __name__ == "__main__":
