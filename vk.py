@@ -30,4 +30,14 @@ def get_upload_url(token):
         }
     )
     response.raise_for_status()
-    return response.json()["upload_url"]
+    return response.json()["response"]["upload_url"]
+
+
+def upload_image(token, image_path):
+    with open(image_path, "rb") as image:
+        response = requests.post(
+            get_upload_url(token),
+            files={"photo": image},
+        )
+    response.raise_for_status()
+    return response.json()
