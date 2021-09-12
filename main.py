@@ -21,11 +21,13 @@ def main():
         "group_id": group_id,
     }
     comic = fetch_random_comic()
-    download_image(comic["img"], image_path)
-    uploaded_comic = vk.upload_image(image_path, params)
-    os.remove(image_path)
-    album_saved_comic = vk.save_album_comic(uploaded_comic, params)
-    vk.publish_comic(album_saved_comic, comic["title"], params)
+    try:
+        download_image(comic["img"], image_path)
+        uploaded_comic = vk.upload_image(image_path, params)
+        album_saved_comic = vk.save_album_comic(uploaded_comic, params)
+        vk.publish_comic(album_saved_comic, comic["title"], params)
+    finally:
+        os.remove(image_path)
 
 
 if __name__ == "__main__":
