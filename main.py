@@ -16,17 +16,17 @@ def main():
     group_id = env.int("VK_GROUP_ID")
 
     params = {
-        "access_token": token,
-        "v": vk.API_VERSION,
+        "api_token": token,
+        "api_version": vk.API_VERSION,
         "group_id": group_id,
     }
     comic = fetch_random_comic()
     try:
         download_image(comic["img"], image_path)
-        upload_url = vk.get_upload_url(params)
+        upload_url = vk.get_upload_url(**params)
         uploaded_comic = vk.upload_image(upload_url, image_path)
-        album_saved_comic = vk.save_album_comic(uploaded_comic, params)
-        vk.publish_comic(album_saved_comic, comic["title"], params)
+        album_saved_comic = vk.save_album_comic(uploaded_comic, **params)
+        vk.publish_comic(album_saved_comic, comic["title"], **params)
     finally:
         os.remove(image_path)
 
