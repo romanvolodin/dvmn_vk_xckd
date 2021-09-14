@@ -25,8 +25,18 @@ def main():
     try:
         upload_url = vk.get_upload_url(**params)
         uploaded_comic = vk.upload_image(upload_url, image_path)
-        album_saved_comic = vk.save_album_comic(uploaded_comic, **params)
-        vk.publish_comic(album_saved_comic, comic["title"], **params)
+        album_saved_comic = vk.save_album_comic(
+            uploaded_comic["photo"],
+            uploaded_comic["server"],
+            uploaded_comic["hash"],
+            **params,
+        )
+        vk.publish_comic(
+            album_saved_comic["owner_id"],
+            album_saved_comic["id"],
+            comic["title"],
+            **params,
+        )
     finally:
         os.remove(image_path)
 
