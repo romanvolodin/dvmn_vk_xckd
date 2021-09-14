@@ -64,5 +64,6 @@ def publish_comic(saved_comic, title, api_token, api_version, group_id):
 
 
 def raise_error(response):
-    if "error" in response.json():
-        raise requests.exceptions.HTTPError(response.json()["error"])
+    deserialized_response = response.json()
+    if "error" in deserialized_response:
+        raise requests.exceptions.HTTPError(deserialized_response["error"])
