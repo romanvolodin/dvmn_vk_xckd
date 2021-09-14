@@ -14,14 +14,14 @@ def get_upload_url(api_token, api_version, group_id):
     response = requests.get(
         f"{API_BASE_URL}/photos.getWallUploadServer", params=params
     )
-    raise_error(response)
+    check_error(response)
     return response.json()["response"]["upload_url"]
 
 
 def upload_image(url, image_path):
     with open(image_path, "rb") as image:
         response = requests.post(url, files={"photo": image})
-    raise_error(response)
+    check_error(response)
     return response.json()
 
 
@@ -37,7 +37,7 @@ def save_album_comic(uploaded_comic, api_token, api_version, group_id):
     response = requests.post(
         f"{API_BASE_URL}/photos.saveWallPhoto", params=params
     )
-    raise_error(response)
+    check_error(response)
     return response.json()["response"][0]
 
 
@@ -55,11 +55,11 @@ def publish_comic(saved_comic, title, api_token, api_version, group_id):
         ),
     }
     response = requests.post(f"{API_BASE_URL}/wall.post", params=params)
-    raise_error(response)
+    check_error(response)
     return response.json()
 
 
-def raise_error(response):
+def check_error(response):
     deserialized_response = response.json()
     if "error" in deserialized_response:
         raise requests.exceptions.HTTPError(deserialized_response["error"])
