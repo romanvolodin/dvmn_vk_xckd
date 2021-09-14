@@ -21,8 +21,8 @@ def main():
         "group_id": group_id,
     }
     comic = fetch_random_comic()
+    download_image(comic["img"], image_path)
     try:
-        download_image(comic["img"], image_path)
         upload_url = vk.get_upload_url(**params)
         uploaded_comic = vk.upload_image(upload_url, image_path)
         album_saved_comic = vk.save_album_comic(uploaded_comic, **params)
