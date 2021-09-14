@@ -13,11 +13,9 @@ def get_upload_url(params):
     return response.json()["response"]["upload_url"]
 
 
-def upload_image(image_path, params):
+def upload_image(url, image_path):
     with open(image_path, "rb") as image:
-        response = requests.post(
-            get_upload_url(params), files={"photo": image}
-        )
+        response = requests.post(url, files={"photo": image})
     response.raise_for_status()
     return response.json()
 

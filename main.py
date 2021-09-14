@@ -23,7 +23,8 @@ def main():
     comic = fetch_random_comic()
     try:
         download_image(comic["img"], image_path)
-        uploaded_comic = vk.upload_image(image_path, params)
+        upload_url = vk.get_upload_url(params)
+        uploaded_comic = vk.upload_image(upload_url, image_path)
         album_saved_comic = vk.save_album_comic(uploaded_comic, params)
         vk.publish_comic(album_saved_comic, comic["title"], params)
     finally:
