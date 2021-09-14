@@ -6,13 +6,13 @@ API_VERSION = 5.131
 
 
 def get_upload_url(api_token, api_version, group_id):
+    params = {
+        "access_token": api_token,
+        "v": api_version,
+        "group_id": group_id,
+    }
     response = requests.get(
-        f"{API_BASE_URL}/photos.getWallUploadServer",
-        params={
-            "access_token": api_token,
-            "v": api_version,
-            "group_id": group_id,
-        },
+        f"{API_BASE_URL}/photos.getWallUploadServer", params=params
     )
     response.raise_for_status()
     return response.json()["response"]["upload_url"]
