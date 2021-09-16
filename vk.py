@@ -62,8 +62,8 @@ def publish_comic(image_owner_id, image_id, title,
 
 
 def check_error(response):
+    response.raise_for_status()
     deserialized_response = response.json()
     if "error" in deserialized_response:
         raise requests.exceptions.HTTPError(deserialized_response["error"])
-    response.raise_for_status()
     return deserialized_response
